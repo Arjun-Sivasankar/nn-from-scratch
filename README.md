@@ -10,13 +10,13 @@ To run the neural network, you'll need to have Python 3.x installed on your mach
 Usage
 Clone this repository to your local machine:
 ```bash
-  git clone https://github.com/Arjun-Sivasankar/neural-network-from-scratch.git
+  git clone https://github.com/Arjun-Sivasankar/nn-from-scratch.git
 ```
 
 
 Navigate to the root directory of the project:
 ```bash
-    cd neural-network-from-scratch
+    cd nn-from-scratch
 ```
 Run the neural_network.py file:
 
