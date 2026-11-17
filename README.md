@@ -1,45 +1,51 @@
 # Neural Network from Scratch
 
-This is a Python implementation of a simple neural network from scratch, without using any external libraries or frameworks. The purpose of this project is to provide a clear and concise example of how a neural network works, and to serve as a starting point for those who are new to deep learning.
+A single-hidden-layer neural network written in NumPy, with forward propagation and backpropagation implemented by hand. No PyTorch, no TensorFlow, no autograd, nothing that computes a gradient for you.
 
+The demo at the bottom of the file trains the network on XOR, the problem that made single-layer perceptrons famous for what they could not do.
 
-## Requirements
-Requirements
-To run the neural network, you'll need to have Python 3.x installed on your machine.
+## Why bother
 
-Usage
-Clone this repository to your local machine:
-```bash
-  git clone https://github.com/Arjun-Sivasankar/nn-from-scratch.git
+Because "I know how backpropagation works" is easy to say and hard to mean. Writing it once, with the chain rule laid out explicitly over two weight matrices, is the difference between using a framework and understanding what the framework is doing when it calls `.backward()`.
+
+## The implementation
+
+```text
+inputs ──► weights1 ──► sigmoid ──► hidden ──► weights2 ──► sigmoid ──► output
+                                          ◄── error propagates back ◄──
 ```
 
+| Piece | Where |
+|---|---|
+| Weight initialisation, sigmoid and its derivative | `__init__`, `sigmoid`, `sigmoid_derivative` |
+| Forward pass through both layers | `forward` |
+| Error at the output, backpropagation into the hidden layer, weight updates | `backward` |
+| The training loop and the XOR demo | `train`, and the calls at the bottom of the file |
 
-Navigate to the root directory of the project:
+The sigmoid derivative is computed as `x * (1 - x)` on the **activation**, which is the correct form: if `x = sigmoid(z)` then `sigmoid'(z) = x(1 - x)`.
+
+## Running it
+
 ```bash
-    cd nn-from-scratch
+pip install numpy
+python NeuralNetwork.py
 ```
-Run the neural_network.py file:
 
-Copy code
-```bash
-    python NeuralNetwork.py
-```
-This will train the neural network on a simple example and output the network's predictions.
+It prints the error every 1000 epochs, then the expected and actual outputs for the four XOR inputs.
 
+## Changing the experiment
 
+The architecture is set by `NeuralNetwork(2, 3, 1)`, the training pairs are `inputs` and `expected_output`, and the epoch count is the third argument to `train`. Swapping in a different truth table is a four-line change.
 
-## Customization
+## What it deliberately leaves out
 
-Customization
-If you want to customize the neural network, you can modify the hyperparameters in the NeuralNetwork class. For example, you can change the number of input nodes, hidden nodes, output nodes, and learning rate.
+- **No bias terms.** The network can only fit functions that pass through the origin of each layer's input space.
+- **No learning rate.** Every update applies the full delta, so a larger dataset would need one to stay stable.
+- **No mini-batches.** All four examples go through in one step.
+- **No regularisation, no validation split, no metrics beyond mean absolute error.**
 
-You can also provide your own training data by modifying the inputs and expected_output arrays in the main function.
+These are the pieces that separate a teaching implementation from a usable one, and each is a natural next exercise.
 
-## Credits
-This project was created by Arjun Sivasankar. Feel free to use and modify it as you see fit. If you have any questions or feedback, please don't hesitate to reach out.
+## License
 
-
-## Authors
-
-- [@ArjunSivasankar](https://github.com/Arjun-Sivasankar)
-
+MIT. See `LICENSE`.
